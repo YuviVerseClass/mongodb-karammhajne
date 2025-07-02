@@ -4,7 +4,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const taskList = document.getElementById("task-list");
 
   const loadTasks = async () => {
-    const res = await fetch("/api/tasks");
+    const res = await fetch("http://localhost:3000/api/tasks");
     const tasks = await res.json();
     taskList.innerHTML = "";
     tasks.forEach(task => {
@@ -24,21 +24,28 @@ document.addEventListener("DOMContentLoaded", () => {
   };
 
   const addTask = async (title) => {
-    await fetch("/api/tasks", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ title }),
-    });
-    loadTasks();
-  };
+  const res = await fetch("http://localhost:3000/api/tasks", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({ title })  
+  });
+
+  const data = await res.json();
+  console.log("✅ Task added:", data);
+
+  loadTasks();
+};
+
 
   const toggleTask = async (id) => {
-    await fetch("/api/tasks/" + id, { method: "PATCH" });
+    await fetch("http://localhost:3000/api/tasks/" + id, { method: "PATCH" });
     loadTasks();
   };
 
   const deleteTask = async (id) => {
-    await fetch("/api/tasks/" + id, { method: "DELETE" });
+    await fetch("http://localhost:3000/api/tasks/" + id, { method: "DELETE" });
     loadTasks();
   };
 
